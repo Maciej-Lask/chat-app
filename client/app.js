@@ -6,6 +6,9 @@ const addMessageForm = document.getElementById('add-messages-form');
 const userNameInput = document.getElementById('username');
 const messageContentInput = document.getElementById('message-content');
 
+const socket = io();
+socket.on('message', ({ author, content }) => addMessage(author, content));
+
 let userName = '';
 
 loginForm.addEventListener('submit', function (event) {
@@ -22,7 +25,6 @@ function login(event) {
   const enteredUserName = userNameInput.value;
 
   if (enteredUserName.trim() === '') {
-    // Wyświetlenie komunikatu o błędzie
     alert('Wprowadź nazwę użytkownika.');
     return;
   }
@@ -34,6 +36,7 @@ function login(event) {
   messagesSection.classList.add('show');
 
   console.log('Zalogowano jako: ' + userName);
+  socket.emit('join', { author: userName});
 }
 
 function sendMessage(event) {
@@ -44,10 +47,11 @@ function sendMessage(event) {
     alert('Wprowadź treść wiadomości.');
     return;
   }
-
+  else {
   addMessage(userName, messageContent);
-
+  socket.emit('message', { author: userName, content: messageContent });
   messageContentInput.value = '';
+  }
 }
 
 function addMessage(author, content) {
