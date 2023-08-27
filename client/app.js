@@ -24,7 +24,7 @@ function login(event) {
   event.preventDefault();
   const enteredUserName = userNameInput.value;
 
-  if (enteredUserName.trim() === '') {
+  if (!enteredUserName.trim()) {
     alert('Wprowadź nazwę użytkownika.');
     return;
   }
@@ -43,14 +43,13 @@ function sendMessage(event) {
   event.preventDefault();
   const messageContent = messageContentInput.value;
   console.log(messageContent);
-  if (messageContent.trim() === '') {
+  if (!messageContent.trim()) {
     alert('Wprowadź treść wiadomości.');
     return;
-  }
-  else {
-  addMessage(userName, messageContent);
-  socket.emit('message', { author: userName, content: messageContent });
-  messageContentInput.value = '';
+  } else {
+    addMessage(userName, messageContent);
+    socket.emit('message', { author: userName, content: messageContent });
+    messageContentInput.value = '';
   }
 }
 
